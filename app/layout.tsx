@@ -58,7 +58,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${sourceSans.variable} antialiased`}>
-      <body>{children}</body>
+      <body style={{overflowX: 'hidden'}}>{children}</body>
     </html>
   )
 }

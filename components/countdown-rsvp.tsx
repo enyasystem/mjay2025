@@ -111,7 +111,7 @@ export function CountdownRSVP() {
 
   return (
     <section className="py-12 sm:py-16 px-4 bg-gradient-to-br from-green-50 to-orange-50">
-      <div className="max-w-6xl mx-auto">
+  <div className="w-full max-w-6xl mx-0">
         {/* Countdown Section */}
         <div className="text-center mb-12 sm:mb-16">
           <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 font-serif px-4">
@@ -122,7 +122,7 @@ export function CountdownRSVP() {
             <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white mb-10 sm:mb-12">
               Countdown to our Wedding
             </h2>
-            <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center pt-4 sm:pt-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-center pt-4 sm:pt-6 w-full">
               <div>
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{timeLeft.days}</div>
                 <div className="text-green-200 text-xs sm:text-sm">days</div>
