@@ -6,8 +6,6 @@ import { useState, useEffect } from "react"
 
 export function CountdownRSVP() {
   const [timeLeft, setTimeLeft] = useState({
-    months: 0,
-    weeks: 0,
     days: 0,
     hours: 0,
     minutes: 0,
@@ -23,72 +21,11 @@ export function CountdownRSVP() {
       const now = new Date();
       if (target > now) {
         let diffMs = target.getTime() - now.getTime();
-        let months = 0;
-        let tempDate = new Date(now.getTime());
-        // Calculate months
-        while (true) {
-          let nextMonth = new Date(tempDate.getTime());
-          nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1);
-          if (nextMonth <= target) {
-            months++;
-            tempDate = nextMonth;
-          } else {
-            break;
-          }
-        }
-        // Calculate weeks (full weeks only)
-        let weeks = 0;
-        while (true) {
-          let nextWeek = new Date(tempDate.getTime());
-          nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
-          if (nextWeek <= target) {
-            weeks++;
-            tempDate = nextWeek;
-          } else {
-            break;
-          }
-        }
-        // Calculate days
-        let days = 0;
-        while (true) {
-          let nextDay = new Date(tempDate.getTime());
-          nextDay.setUTCDate(nextDay.getUTCDate() + 1);
-          if (nextDay <= target) {
-            days++;
-            tempDate = nextDay;
-          } else {
-            break;
-          }
-        }
-        // Calculate hours
-        let hours = 0;
-        while (true) {
-          let nextHour = new Date(tempDate.getTime());
-          nextHour.setUTCHours(nextHour.getUTCHours() + 1);
-          if (nextHour <= target) {
-            hours++;
-            tempDate = nextHour;
-          } else {
-            break;
-          }
-        }
-        // Calculate minutes
-        let minutes = 0;
-        while (true) {
-          let nextMinute = new Date(tempDate.getTime());
-          nextMinute.setUTCMinutes(nextMinute.getUTCMinutes() + 1);
-          if (nextMinute <= target) {
-            minutes++;
-            tempDate = nextMinute;
-          } else {
-            break;
-          }
-        }
-        // Calculate seconds
-        let seconds = Math.floor((target.getTime() - tempDate.getTime()) / 1000);
+        let days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
         setTimeLeft({
-          months,
-          weeks,
           days,
           hours,
           minutes,
@@ -96,8 +33,6 @@ export function CountdownRSVP() {
         });
       } else {
         setTimeLeft({
-          months: 0,
-          weeks: 0,
           days: 0,
           hours: 0,
           minutes: 0,
@@ -187,15 +122,7 @@ export function CountdownRSVP() {
             <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white mb-6 sm:mb-8">
               Countdown to our Wedding
             </h2>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 text-center">
-              <div>
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{timeLeft.months}</div>
-                <div className="text-green-200 text-xs sm:text-sm">months</div>
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{timeLeft.weeks}</div>
-                <div className="text-orange-200 text-xs sm:text-sm">weeks</div>
-              </div>
+            <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center">
               <div>
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{timeLeft.days}</div>
                 <div className="text-green-200 text-xs sm:text-sm">days</div>
