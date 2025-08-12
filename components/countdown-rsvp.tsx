@@ -119,10 +119,10 @@ export function CountdownRSVP() {
           </p>
 
           <div className="bg-gradient-to-r from-green-900 to-orange-800 rounded-2xl p-6 sm:p-8 max-w-2xl mx-auto">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white mb-10 sm:mb-12">
               Countdown to our Wedding
             </h2>
-            <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+            <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center pt-4 sm:pt-6">
               <div>
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{timeLeft.days}</div>
                 <div className="text-green-200 text-xs sm:text-sm">days</div>
