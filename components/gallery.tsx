@@ -1,13 +1,20 @@
 "use client"
 
-// Auto-play interval in ms (faster speed)
-const AUTO_PLAY_INTERVAL = 1000;
+// Auto-play interval in ms (slower speed)
+const AUTO_PLAY_INTERVAL = 3500;
 
 import type React from "react"
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
 
-const images = [
+
+// Gallery image type
+type GalleryImage = {
+  src: string;
+  alt: string;
+};
+
+const images: GalleryImage[] = [
   {
     src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=400&fit=crop",
     alt: "Couple at formal event",
@@ -30,32 +37,63 @@ const images = [
   },
 ];
 
+
+// For seamless looping: add a clone of the first image to the end
+const extendedImages: GalleryImage[] = [...images, images[0]];
+
+
 export function Gallery() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isHovered, setIsHovered] = useState(false)
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
-  const [lightboxIndex, setLightboxIndex] = useState(0)
-  const [isManualNavigation, setIsManualNavigation] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [isManualNavigation, setIsManualNavigation] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Auto-play slider
+  // Auto-play and manual navigation
   useEffect(() => {
+    if (isManualNavigation) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length)
-    }, AUTO_PLAY_INTERVAL) // 2 seconds for fast auto-play
-    return () => clearInterval(interval)
-  }, [])
+      if (currentIndex === images.length) return; // Don't advance past the clone
+      setCurrentIndex((prev) => prev + 1);
+    }, AUTO_PLAY_INTERVAL);
+    return () => clearInterval(interval);
+  }, [isManualNavigation, currentIndex]);
 
+  // When we reach the clone (last slide), jump instantly to the real first slide
+  useEffect(() => {
+    if (currentIndex === images.length) {
+      // Wait for the transition to finish, then jump to 0 without animation
+      const timeout = setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(0);
+      }, 700); // match transition duration-700
+      return () => clearTimeout(timeout);
+    } else {
+      setIsTransitioning(true);
+    }
+  }, [currentIndex]);
+
+  // Only one set of next/prev functions
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length)
-    setIsManualNavigation(true)
-    setTimeout(() => setIsManualNavigation(false), 5000)
-  }
+    // If at the last (cloned) slide, do nothing (will auto-jump in useEffect)
+    if (currentIndex === images.length) return;
+    setCurrentIndex((prev) => prev + 1);
+    setIsManualNavigation(true);
+    setTimeout(() => setIsManualNavigation(false), 4000);
+  };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
-    setIsManualNavigation(true)
-    setTimeout(() => setIsManualNavigation(false), 5000)
-  }
+    // If at the first slide, jump to the last real slide instantly (no animation)
+    if (currentIndex === 0) {
+      setIsTransitioning(false);
+      setCurrentIndex(images.length - 1);
+    } else {
+      setCurrentIndex((prev) => prev - 1);
+    }
+    setIsManualNavigation(true);
+    setTimeout(() => setIsManualNavigation(false), 4000);
+  };
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index)
@@ -148,33 +186,26 @@ export function Gallery() {
         <div className="relative overflow-hidden">
           <div className="overflow-hidden w-full">
             <div
-              className="flex gap-8 animate-gallery-scroll"
+              className={`flex gap-8 ${isTransitioning ? 'transition-transform duration-700' : ''}`}
               style={{
-                width: `${images.length * 100}vw`,
-                animation: `gallery-scroll ${images.length * AUTO_PLAY_INTERVAL * 2}ms linear infinite`,
+                width: `${extendedImages.length * 100}vw`,
+                transform: `translateX(-${currentIndex * 100}vw)`
               }}
             >
-              {images.map((image, index) => (
+              {extendedImages.map((image, index) => (
                 <div key={index} className="w-[92vw] sm:w-96 md:w-[32rem] lg:w-[36rem] flex-shrink-0">
                   <div className="overflow-hidden rounded-md bg-gray-200 shadow-lg">
                     <img
                       src={image.src || "/placeholder.svg"}
                       alt={image.alt}
                       className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
-                      onClick={() => openLightbox(index)}
+                      onClick={() => openLightbox(index % images.length)}
                     />
                   </div>
                 </div>
               ))}
             </div>
           </div>
-{/*  Add keyframes for continuous scroll */ }
-<style jsx global>{`
-@keyframes gallery-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-${images.length * 100}vw); }
-}
-`}</style>
           <div className="flex justify-center items-center gap-4 mt-6 sm:mt-8">
             <button
               onClick={prevSlide}
