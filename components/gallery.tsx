@@ -1,9 +1,34 @@
 "use client"
 
-import type React from "react"
+// Auto-play interval in ms (faster speed)
+const AUTO_PLAY_INTERVAL = 1000;
 
+import type React from "react"
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
+
+const images = [
+  {
+    src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=400&fit=crop",
+    alt: "Couple at formal event",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&h=400&fit=crop",
+    alt: "Couple taking selfie",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=400&fit=crop",
+    alt: "Couple at architectural location",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop",
+    alt: "Couple in city at night",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&h=400&fit=crop",
+    alt: "Couple casual photo",
+  },
+];
 
 export function Gallery() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -12,48 +37,13 @@ export function Gallery() {
   const [lightboxIndex, setLightboxIndex] = useState(0)
   const [isManualNavigation, setIsManualNavigation] = useState(false)
 
-  const images = [
-    {
-      src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=400&fit=crop",
-      alt: "Couple at formal event",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&h=400&fit=crop",
-      alt: "Couple taking selfie",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=400&fit=crop",
-      alt: "Couple at architectural location",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop",
-      alt: "Couple in city at night",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&h=400&fit=crop",
-      alt: "Couple casual photo",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=400&fit=crop",
-      alt: "Couple at formal event",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&h=400&fit=crop",
-      alt: "Couple taking selfie",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=400&fit=crop",
-      alt: "Couple at architectural location",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop",
-      alt: "Couple in city at night",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&h=400&fit=crop",
-      alt: "Couple casual photo",
-    },
-  ]
+  // Auto-play slider
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length)
+    }, AUTO_PLAY_INTERVAL) // 2 seconds for fast auto-play
+    return () => clearInterval(interval)
+  }, [])
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length)
@@ -136,13 +126,12 @@ export function Gallery() {
   }
 
   return (
-    <section id="gallery" className="min-h-screen bg-stone-50 py-12 sm:py-16 px-4">
+    <section id="gallery" className="min-h-screen bg-stone-50 py-12 sm:py-16 px-2 sm:px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-6 sm:mb-8">
+          <h2 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-green-800 mb-8 tracking-wide drop-shadow-lg">
             Our Gallery
           </h2>
-
           <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4">
             <svg width="30" height="30" viewBox="0 0 40 40" className="text-green-600 sm:w-10 sm:h-10">
               <g fill="none" stroke="currentColor" strokeWidth="1">
@@ -156,39 +145,36 @@ export function Gallery() {
             </svg>
           </div>
         </div>
-
         <div className="relative overflow-hidden">
-          <div
-            className={`flex gap-3 sm:gap-4 md:gap-6 ${
-              isManualNavigation || isHovered
-                ? "transition-transform duration-500 ease-in-out"
-                : "gallery-continuous-scroll"
-            }`}
-            style={
-              isManualNavigation || isHovered
-                ? {
-                    transform: `translateX(-${currentIndex * (192 + 16)}px)`,
-                    width: `${images.length * (192 + 16)}px`,
-                  }
-                : {}
-            }
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {[...images, ...images].map((image, index) => (
-              <div key={index} className="w-48 sm:w-60 md:w-72 lg:w-80 flex-shrink-0">
-                <div className="aspect-[4/3] overflow-hidden rounded-lg bg-gray-200 shadow-lg">
-                  <img
-                    src={image.src || "/placeholder.svg"}
-                    alt={image.alt}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
-                    onClick={() => openLightbox(index % images.length)}
-                  />
+          <div className="overflow-hidden w-full">
+            <div
+              className="flex gap-8 animate-gallery-scroll"
+              style={{
+                width: `${images.length * 100}vw`,
+                animation: `gallery-scroll ${images.length * AUTO_PLAY_INTERVAL * 2}ms linear infinite`,
+              }}
+            >
+              {images.map((image, index) => (
+                <div key={index} className="w-[92vw] sm:w-96 md:w-[32rem] lg:w-[36rem] flex-shrink-0">
+                  <div className="overflow-hidden rounded-md bg-gray-200 shadow-lg">
+                    <img
+                      src={image.src || "/placeholder.svg"}
+                      alt={image.alt}
+                      className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      onClick={() => openLightbox(index)}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-
+{/*  Add keyframes for continuous scroll */ }
+<style jsx global>{`
+@keyframes gallery-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-${images.length * 100}vw); }
+}
+`}</style>
           <div className="flex justify-center items-center gap-4 mt-6 sm:mt-8">
             <button
               onClick={prevSlide}
@@ -197,11 +183,9 @@ export function Gallery() {
             >
               <span className="text-xl sm:text-2xl font-bold">‹</span>
             </button>
-
             <span className="text-sm sm:text-base text-gray-600 font-medium">
               {currentIndex + 1} / {images.length}
             </span>
-
             <button
               onClick={nextSlide}
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-green-600 hover:text-green-700 border border-green-200 hover:border-green-300"
@@ -249,7 +233,8 @@ export function Gallery() {
             <img
               src={images[lightboxIndex].src.replace("w=600&h=400", "w=1200&h=800") || "/placeholder.svg"}
               alt={images[lightboxIndex].alt}
-              className="max-w-full max-h-full object-contain rounded-lg mx-auto block"
+              className="w-auto h-auto object-contain rounded-lg mx-auto block"
+              style={{display: 'block'}}
             />
 
             <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm">

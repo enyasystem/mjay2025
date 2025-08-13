@@ -308,9 +308,9 @@ export function CountdownRSVP() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-gradient-to-r from-green-800 to-orange-800 text-white px-6 sm:px-8 py-3 rounded-lg hover:from-green-700 hover:to-orange-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                className="bg-gradient-to-r from-green-800 to-orange-800 text-white px-8 sm:px-12 py-4 rounded-xl shadow-lg font-bold text-lg sm:text-xl transition-all duration-200 hover:from-green-700 hover:to-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-400/40 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Sending..." : "Send RSVP"}
+                {isSubmitting ? "Sending RSVP..." : "Send RSVP"}
               </button>
             </div>
           </form>
@@ -336,7 +336,7 @@ export function CountdownRSVP() {
               <div className="mt-6">
                 <button
                   onClick={() => setShowSuccessModal(false)}
-                  className="bg-white text-green-700 px-6 py-2 rounded-lg hover:bg-green-50 transition-colors text-sm font-medium shadow-md"
+                  className="bg-white text-green-700 px-8 py-3 rounded-xl shadow-lg font-bold text-lg transition-all duration-200 hover:bg-green-100 focus:outline-none focus:ring-4 focus:ring-green-400/40"
                 >
                   Close
                 </button>
