@@ -183,9 +183,6 @@ export function Gallery() {
             >
               <span className="text-xl sm:text-2xl font-bold">‹</span>
             </button>
-            <span className="text-sm sm:text-base text-gray-600 font-medium">
-              {currentIndex + 1} / {images.length}
-            </span>
             <button
               onClick={nextSlide}
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-green-600 hover:text-green-700 border border-green-200 hover:border-green-300"
