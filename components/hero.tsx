@@ -37,7 +37,7 @@ export function Hero() {
                   style={{ filter: 'url(#soft)' }}
                 />
                 <path d="M0 0 H360 V390 C360 460 300 520 180 520 C60 520 0 460 0 390 Z" fill="none" stroke="rgba(0,0,0,0.02)" strokeWidth="6" />
-              </svg><br /> <br />
+              </svg><br />
               <div
                 className="floral-wrap"
                 style={{
@@ -62,9 +62,8 @@ export function Hero() {
           </div>
           {/* Removed duplicate floral decoration for desktop */}
         </div>
-        {/* Reduce margin above names for mobile so they sit closer to floral */}
-        <br />
-        <div className="mt-8 sm:mt-24 mb-10 sm:mb-20 w-full mx-0">
+        {/* Remove margin above names for mobile so they sit closer to floral */}
+  <div className="mt-0 pt-0 sm:mt-24 sm:pt-0 mb-10 sm:mb-20 w-full mx-0">
           <h1 className="font-serif font-extrabold text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-9xl text-green-800 leading-tight mb-1 tracking-tight">
             Mary
           </h1>
